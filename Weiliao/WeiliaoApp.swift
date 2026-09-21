@@ -58,10 +58,12 @@ struct WebViewScreen: UIViewRepresentable {
                 webView.load(URLRequest(url: self.startURL))
             })
             alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-            // 找到顶层 ViewController 弹窗
+            // 找到顶层 ViewController 弹窗（兼容 iOS 14：不使用 iOS 15 才有的 keyWindow）
             var top = UIApplication.shared.connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
-                .first
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first(where: { $0.isKeyWindow })?
+                .rootViewController
             while let presented = top?.presentedViewController { top = presented }
             top?.present(alert, animated: true)
         }
