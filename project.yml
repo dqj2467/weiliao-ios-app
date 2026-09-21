@@ -4,9 +4,9 @@ options:
   deploymentTarget:
     iOS: "14.0"
   createIntermediateGroups: true
-  # 固定工程文件格式，兼容 Xcode 14/15 的编译环境（新版 xcodegen 默认生成 Xcode16 格式会导致云端编译失败）
-  objectVersion: 56
   xcodeVersion: "15.4"
+  # 生成工程后自动把 Xcode16 格式降级为 Xcode14/15 可读格式（云端运行器为 Xcode 15.4）
+  postGenCommand: bash scripts/fix_project_format.sh
 
 targets:
   Weiliao:
